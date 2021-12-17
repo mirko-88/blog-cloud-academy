@@ -1,0 +1,10 @@
+version: '2'
+services:
+    blog:
+        container_name: web-layer
+        build:
+            context: web-layer
+        image: blog-service:latest
+        ports:
+            - 8080:8080
+  
