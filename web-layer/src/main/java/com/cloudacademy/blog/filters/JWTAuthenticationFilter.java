@@ -18,13 +18,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.cloudacademy.blog.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	
 	private AuthenticationManager authenticationManager;
 	
-
 	public static final String SECRET = "SECRET_KEY";
 	public static final long EXPIRATION_TIME = 900_000; // 15 mins
 	
@@ -38,12 +38,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            Map<String, String> creds = new ObjectMapper().readValue(req.getInputStream(), HashMap.class);
+        	User creds = new ObjectMapper().readValue(req.getInputStream(), User.class);
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.get("username"),
-                            creds.get("password"),
+                            creds.getUsername(),
+                            creds.getPassword(),
                             new ArrayList<>())
             );
         } catch (IOException e) {
